@@ -21,26 +21,15 @@ const courseSchema=new mongoose.Schema({
     },
     duration:{
         type:Number,
-        required:true,
-        min:0
+        min:0,
+        default: 0,
     },
     category:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Category',
         required:true
     },
-    lessons: [
-        { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: "Lesson" 
-        }
-    ],
-    reviews: [
-        { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: "Review" 
-        }
-    ],
+    
 },{timestamps:true})
 
-export default Course =mongoose.model('Course',courseSchema);;
+export const Course =mongoose.model('Course',courseSchema);;
