@@ -29,3 +29,26 @@ export const uploadOnCloudinary = async (localFilePath) => {
   }
 }
 
+
+export const uploadVideoOnCloudinary = async (localFilePath) => {
+  try {
+      if (!localFilePath) {
+          throw new Error("File path is missing");
+      }
+
+      const response = await cloudinary.uploader.upload(localFilePath, {
+          resource_type: 'video' 
+      });
+
+      fs.unlinkSync(localFilePath);
+
+      return response; 
+  } catch (error) {
+      if (fs.existsSync(localFilePath)) {
+          fs.unlinkSync(localFilePath);
+      }
+      console.error("Error uploading video:", error);
+      return null;
+  }
+};
+
