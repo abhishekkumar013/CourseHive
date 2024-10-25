@@ -13,6 +13,10 @@ const lessonSchema = new mongoose.Schema({
         type: String,
         required: true 
     },
+    duration:{
+        type: Number,
+        default:0,
+    },
     course: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "Course", 

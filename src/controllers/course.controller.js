@@ -102,48 +102,6 @@ export const getAllCourseOfTeacher = asyncHandler(async (req, res, next) => {
 });
 
 
-export const getMyCourse = asyncHandler(async (req, res, next) => {
-    try {
-        const { id } = req.user;
-
-        const courses = await Course.aggregate([
-            {
-                $match: { teacher: mongoose.Types.ObjectId(id) }
-            },
-            {
-                $lookup: {
-                    from: 'users', 
-                    localField: 'teacher', 
-                    foreignField: '_id', 
-                    as: 'teacherDetails'
-                }
-            },
-            {
-                $unwind: '$teacherDetails'
-            },
-            {
-                $project: {
-                    _id: 1,
-                    title: 1,
-                    description: 1,
-                    price: 1,
-                    duration: 1,
-                    category: 1,
-                    'teacherDetails.name': 1,
-                }
-            }
-        ]);
-
-        if (!courses || courses.length === 0) {
-            throw new ErrorHandler('No courses found for this teacher', 404);
-        }
-
-        return res.status(200).json(new ApiResponse(200, courses, 'Courses fetched successfully'));
-    } catch (error) {
-        next(error);
-    }
-});
-
 export const getCourseById = asyncHandler(async (req, res, next) => {
     try {
         const {courseid}=req.params
