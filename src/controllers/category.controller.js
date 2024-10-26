@@ -1,6 +1,6 @@
 import { Category } from "../models/category.model";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { ErrorHandler } from "../utils/errorHandler.js";
+import { ErrorHandler } from "../utils/ErrorHandler.js";
 import {ApiResponse} from '../utils/ApiResponse.js';
 
 export const createCategory=asyncHandler(async(req,res,next)=>{
@@ -21,9 +21,9 @@ export const createCategory=asyncHandler(async(req,res,next)=>{
 
 export const deleteCategory=asyncHandler(async(req,res,next)=>{
     try {
-        const {Cid}=req.body
+        const {cid}=req.params
     
-        await Category.findByIdAndDelete(Cid)
+        await Category.findByIdAndDelete(cid)
 
         return res.status(200).json(new ApiResponse(200, {},'category  deleted successfully'));
 

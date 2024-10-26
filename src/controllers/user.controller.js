@@ -258,3 +258,38 @@ export const logout=asyncHandler(async(req,res,next)=>{
         next(error)
     }
 })
+
+export const forgotPassword=asyncHandler(async(req, res, next)=>{
+    try {
+        const {oldPassword, newPassword,confirmNewPassword} =req.body
+        if(!oldPassword || !newPassword || !confirmNewPassword){
+            throw new ErrorHandler('All fields are required',404)
+        }
+        if(newPassword!==confirmNewPassword){
+            throw new ErrorHandler('New Password and Confirm New Password not Matched',404)
+        }
+
+        const {id}=req.user
+        const user=await User.findById(id)
+        const match=user.isPasswordCorrect(oldPassword)
+        if(!match){
+            throw new ErrorHandler('Invalid Old Password',404)
+        }
+        user.password=newPassword
+        user.save()
+        return res.status(200).json(new ApiResponse(200,{},'Password updated successfully'))
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const getUser=asyncHandler(async(req,res)=>{
+    try {
+        const {id}=req.user
+        const user=await User.findById(id).select('-password')
+
+        return res.status(200).json(new ApiResponse(200,user,'user data fetched successfully'))
+    } catch (error) {
+        next(error)
+    }
+})
